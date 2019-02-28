@@ -9,6 +9,7 @@ from threading import Thread
 
 setting = {
     'linux': '/etc/hosts',
+    'darwin': '/etc/hosts',
     'windows': 'C:/Windows/System32/drivers/etc/hosts'
 }
 
