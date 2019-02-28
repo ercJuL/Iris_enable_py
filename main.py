@@ -24,15 +24,15 @@ class MyHttpServer(BaseHTTPRequestHandler):
 
 def change_hosts(sys_type):
     host_path = setting[sys_type]
-    with open(host_path, 'r', encoding='ANSI') as f:
+    with open(host_path, 'r') as f:
         txt = f.read()
     try:
         if 'iristech.co' in txt:
             txt = re.sub('.+?iristech.co.*?', '127.0.0.1 iristech.co', txt)
-            with open(host_path, 'w', encoding='ANSI') as f:
+            with open(host_path, 'w') as f:
                 f.write(txt)
         else:
-            with open(host_path, 'a', encoding='ANSI') as f:
+            with open(host_path, 'a') as f:
                 f.writelines('\n127.0.0.1 iristech.co\n')
     except PermissionError as err:
         print('权限不足，请以管理员或root权限运行')
