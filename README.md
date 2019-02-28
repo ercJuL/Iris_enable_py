@@ -2,12 +2,11 @@
 iris 本地激活
 克隆后管理员或root权限运行，有问题提Issues
 
-~- mac/linux
+~- mac/linux  
     `sudo python main.py`~
    
-- Linux
-    `sudo python3 main.py`  
-    :heavy_check_mark: `Ubuntu 16.04.5 LTS` + `Iris-0.9.9-Linux-64bit.zip`
+- Linux  
+    `sudo python3 main.py`
 
 - windows
     管理员权限打开cmd
