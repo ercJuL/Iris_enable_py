@@ -1,3 +1,4 @@
+import os
 import platform
 import re
 import socket
@@ -8,9 +9,16 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from threading import Thread
 
 setting = {
-    'linux': '/etc/hosts',
-    'darwin': '/etc/hosts',
-    'windows': 'C:/Windows/System32/drivers/etc/hosts'
+    'hosts_path': {
+        'linux': '/etc/hosts',
+        'darwin': '/etc/hosts',
+        'windows': 'C:/Windows/System32/drivers/etc/hosts'
+    },
+    'flush_dns_cmd': {
+        'linux': ['/etc/init.d/nscd restart', ],
+        'darwin': ['killall -HUP mDNSResponder', ],
+        'windows': ['ipconfig /flushdns', ]
+    }
 }
 
 
@@ -24,7 +32,7 @@ class MyHttpServer(BaseHTTPRequestHandler):
 
 
 def change_hosts(sys_type):
-    host_path = setting[sys_type]
+    host_path = setting['hosts_path'][sys_type]
     with open(host_path, 'r') as f:
         txt = f.read()
     try:
@@ -45,6 +53,17 @@ def get_ip():
     return addr_info[0][4][0]
 
 
+def exe_cmd(sys_type):
+    for index, cmd in enumerate(setting['flush_dns_cmd'][sys_type]):
+        cmd_result = os.system(cmd)
+        if cmd_result == 0:
+            return
+        print('执行命令 %s 出错' % cmd)
+        print('尝试执行下一条命令')
+    else:
+        print('执行dns刷新命令出错')
+
+
 if __name__ == '__main__':
     print('''###############################
        Iris Pro 本地激活
@@ -58,7 +77,7 @@ if __name__ == '__main__':
         if is_true.lower() != 'y':
             change_hosts(sys_type.lower())
             for try_count in range(5):
-                # todo: 刷新dns缓存
+                exe_cmd(sys_type)
                 iris_ip = get_ip()
                 print('iristech.co ==> ', iris_ip)
                 if iris_ip == '127.0.0.1':
