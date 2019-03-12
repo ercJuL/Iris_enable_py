@@ -70,12 +70,13 @@ if __name__ == '__main__':
 ###############################''')
     sys_type = platform.system()
     print('1 ==> 系统类型： ', sys_type)
+    sys_type = sys_type.lower()
     iris_ip = get_ip()
     print('2 ==> iristech.co 指向 ', iris_ip)
     if iris_ip != '127.0.0.1':
         is_true = input('此 %s ip是否为激活服务器IP? (y/N)' % iris_ip)
         if is_true.lower() != 'y':
-            change_hosts(sys_type.lower())
+            change_hosts(sys_type)
             for try_count in range(5):
                 exe_cmd(sys_type)
                 iris_ip = get_ip()
